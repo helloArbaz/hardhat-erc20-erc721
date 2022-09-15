@@ -7,34 +7,30 @@ import Typography from '@mui/material/Typography'
 import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
-import Avatar from '@mui/material/Avatar'
+
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-import AdbIcon from '@mui/icons-material/Adb'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 
-// import { store } from '../../store'
-// import { increment } from '../../actions/counter'
-// import { getWeb3 } from '../../config/web3Connect'
-// import Web3 from 'web3'
-
 const pages = ['Token', 'NFT', 'Game']
-const settings = ['Profile', 'Transaction', 'Logout']
+const settings = [
+  'Token',
+  'Transaction',
+  'Transfer',
+  'Transaction Logs',
+  'Logout',
+]
 
 const AppBarMenu = () => {
-  // const state = store.getState()
-
-  // console.log(state, 'state')
-
   const [navStyle, setnavStyle] = React.useState(null)
   const [navAch, setnavAch] = React.useState(null)
   const [counter, setCounter] = React.useState(0)
 
-  const handleOpenNavMenu = (event?:any) => {
+  const handleOpenNavMenu = (event?: any) => {
     setnavStyle(event.currentTarget)
   }
-  const handleOpenUserMenu = (event?:any) => {
+  const handleOpenUserMenu = (event?: any) => {
     setnavAch(event.currentTarget)
   }
 
@@ -46,31 +42,9 @@ const AppBarMenu = () => {
     setnavAch(null)
   }
 
-  function onIncrement() {
-    // console.log('----', store)
-    // store.dispatch({
-    //   type: 'increment',
-    //   text: 'Use Redux',
-    // })
-  }
-
-  const connect = async () => {
-    // let response = await getWeb3()
-    // console.log(response, 'respo')
-  }
-
-  React.useEffect(() => {
-    // store.subscribe(updateState)
-  }, [])
-
-  function updateState() {
-    // const state = store.getState()
-    // setCounter(state.counter)
-  }
-
   return (
     <Box>
-      <AppBar position="static">
+      <AppBar  position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -126,7 +100,6 @@ const AppBarMenu = () => {
                 ))}
               </Menu>
             </Box>
-            {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
             <Typography
               variant="h5"
               noWrap
@@ -191,7 +164,9 @@ const AppBarMenu = () => {
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Box fontWeight={"bold"}>
                     <Typography textAlign="center">{setting}</Typography>
+                    </Box>
                   </MenuItem>
                 ))}
               </Menu>
@@ -202,4 +177,4 @@ const AppBarMenu = () => {
     </Box>
   )
 }
-export default AppBarMenu
+export default React.memo(AppBarMenu)

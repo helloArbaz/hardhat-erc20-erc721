@@ -12,12 +12,13 @@ import {
 import Landing from './components/Landing/Landing'
 import {Game} from './components/Game/Game'
 
+
 function App() {
   return (
     <Box>
       <Router>
         <Routes>
-          <Route path="/" element={<Game />}></Route>
+          <Route path="/" element={<Landing />}></Route>
         </Routes>
       </Router>
     </Box>
