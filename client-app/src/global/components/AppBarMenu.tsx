@@ -12,8 +12,9 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import { useNavigate } from 'react-router-dom'
 
-const pages = ['Token', 'NFT', 'Game']
+const pages = [{ name: 'NFT', url: '/nft' },{name:"Game",url:"/game"},{name:"UniSwap",url:"/uniswap"}]
 const settings = [
   'Token',
   'Transaction',
@@ -26,6 +27,7 @@ const AppBarMenu = () => {
   const [navStyle, setnavStyle] = React.useState(null)
   const [navAch, setnavAch] = React.useState(null)
   const [counter, setCounter] = React.useState(0)
+  let navigate = useNavigate()
 
   const handleOpenNavMenu = (event?: any) => {
     setnavStyle(event.currentTarget)
@@ -34,8 +36,9 @@ const AppBarMenu = () => {
     setnavAch(event.currentTarget)
   }
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page?:any) => {
     setnavStyle(null)
+    navigate(page.url)
   }
 
   const handleCloseUserMenu = () => {
@@ -44,7 +47,7 @@ const AppBarMenu = () => {
 
   return (
     <Box>
-      <AppBar  position="static">
+      <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -93,9 +96,9 @@ const AppBarMenu = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                {pages.map((page,i) => (
+                  <MenuItem key={i} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -119,13 +122,13 @@ const AppBarMenu = () => {
               GIGGLE TOKEN
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+              {pages.map((page,i) => (
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
+                  key={i}
+                  onClick={()=>handleCloseNavMenu(page)}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  {page}
+                  {page.name}
                 </Button>
               ))}
             </Box>
@@ -164,8 +167,8 @@ const AppBarMenu = () => {
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Box fontWeight={"bold"}>
-                    <Typography textAlign="center">{setting}</Typography>
+                    <Box fontWeight={'bold'}>
+                      <Typography textAlign="center">{setting}</Typography>
                     </Box>
                   </MenuItem>
                 ))}

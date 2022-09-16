@@ -9,15 +9,20 @@ import CarouselView from '../../global/components/CarouselView'
 import { store } from '../../store'
 import { useSelector, useDispatch } from 'react-redux'
 import { increment } from '../../actions/counter'
+import { ComingSoon } from '../ComingSoon/ComingSoon'
+import { useNavigate } from 'react-router-dom'
+import { Lorem } from '../../global/helper'
 
 const Landing = function () {
   const count = useSelector((state?: any) => state.counter)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  console.log(count,'count')
+  console.log(count, 'count')
 
   return (
     <Box bgcolor={'#141A20'} height="100vh">
+      {/* <ComingSoon/> */}
       {/* <Button color='secondary' onClick={() => dispatch(increment())}>{`Click => ${count}`}</Button> */}
       <AppBarMenu />
       <Box bgcolor={'#141A20'}>
@@ -51,37 +56,9 @@ const Landing = function () {
                   alignContent={'center'}
                   alignItems="center"
                 >
-                  <h2>GIGGLE NFT</h2>
-                  <Box style={{ cursor: 'pointer' }} pl={0.5} pt={1}>
-                    <LaunchIcon color="primary" />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="caption">
-                    NFT's will be coming soon.
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-
-            <Grid item xs={2} sm={4} md={4}>
-              <Box
-                p={1}
-                bgcolor={'#141A20'}
-                color={'white'}
-                border="1px solid #EFB90B"
-                borderRadius={1}
-              >
-                <Box
-                  flexDirection={'row'}
-                  display={'flex'}
-                  justifyContent="center"
-                  alignContent={'center'}
-                  alignItems="center"
-                >
                   <h2>Earn Token While Gaming</h2>
                   <Box
-                    //   onClick={() => navigate('/game')}
+                    onClick={() => navigate('/game')}
                     style={{ cursor: 'pointer' }}
                     pl={0.5}
                     pt={1}
@@ -89,9 +66,9 @@ const Landing = function () {
                     <LaunchIcon color="secondary" />
                   </Box>
                 </Box>
-                <Box>
-                  <Typography variant="caption">
-                    You can earn GIGGLE_TOKES while gaming
+                <Box textAlign={'center'} p={2}>
+                  <Typography variant="h6">
+                    Show you gaming skills and earn TOKENS
                   </Typography>
                 </Box>
               </Box>
@@ -112,15 +89,50 @@ const Landing = function () {
                   alignContent={'center'}
                   alignItems="center"
                 >
-                  <h2>DAPP</h2>
-                  <Box style={{ cursor: 'pointer' }} pl={0.5} pt={1}>
+                  <h2>GIGGLE NFT</h2>
+
+                  <Box
+                    onClick={() => navigate('/nft')}
+                    style={{ cursor: 'pointer' }}
+                    pl={0.5}
+                    pt={1}
+                  >
                     <LaunchIcon color="secondary" />
                   </Box>
                 </Box>
-                <Box>
-                  <Typography variant="caption">
-                    You can earn GIGGLE_TOKES while gaming
-                  </Typography>
+                <Box p={2}>
+                  <Typography variant="h6">{Lorem()}</Typography>
+                </Box>
+              </Box>
+            </Grid>
+
+            <Grid item xs={2} sm={4} md={4}>
+              <Box
+                p={1}
+                bgcolor={'#141A20'}
+                color={'white'}
+                border="1px solid #EFB90B"
+                borderRadius={1}
+              >
+                <Box
+                  flexDirection={'row'}
+                  display={'flex'}
+                  justifyContent="center"
+                  alignContent={'center'}
+                  alignItems="center"
+                >
+                  <h2>UniSwap</h2>
+                  <Box
+                    onClick={() => navigate('/uniswap')}
+                    style={{ cursor: 'pointer' }}
+                    pl={0.5}
+                    pt={1}
+                  >
+                    <LaunchIcon color="secondary" />
+                  </Box>
+                </Box>
+                <Box p={2}>
+                  <Typography variant="h6">{Lorem()}</Typography>
                 </Box>
               </Box>
             </Grid>
