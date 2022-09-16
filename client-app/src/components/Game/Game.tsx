@@ -5,7 +5,7 @@ import './Game.css'
 
 function Game() {
   return (
-    <Box bgcolor={"#141A20"} height={'100vh'}>
+    <Box bgcolor={"#141A20"} height={'100vh'} pb={5}>
       <AppBarMenu />
       <Box pt={2}>
         <Cards />

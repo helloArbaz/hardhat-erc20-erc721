@@ -21,7 +21,7 @@ const Landing = function () {
   console.log(count, 'count')
 
   return (
-    <Box bgcolor={'#141A20'} height="100vh">
+    <Box bgcolor={'#141A20'} height="100vh" pb={2}>
       {/* <ComingSoon/> */}
       {/* <Button color='secondary' onClick={() => dispatch(increment())}>{`Click => ${count}`}</Button> */}
       <AppBarMenu />
