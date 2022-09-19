@@ -1,33 +1,62 @@
 import * as React from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
-import Container from '@mui/material/Container'
-
-import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
-import MenuItem from '@mui/material/MenuItem'
+import { ethers } from 'ethers'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem,
+  Tooltip,
+} from '@mui/material'
 
-const pages = [{ name: 'NFT', url: '/nft' },{name:"Game",url:"/game"},{name:"UniSwap",url:"/uniswap"}]
+import GiggleContractAddress from '../../contract-deployed-address/GiggleToken/GiggleToken.json'
+import GiggleContractABIJson from '../../compile-contract/contracts/GiggleToken.sol/GiggleToken.json'
+import {
+  metaMaskConnect,
+  metaMaskSuccess,
+  metaMaskError,
+} from '../../actions/metaMask.action'
+import {
+  contractConnect,
+  contractError,
+  contractSuccess,
+} from '../../actions/contract.load'
+
+/**
+ * static
+ */
+const pages = [
+  { name: 'NFT', url: '/nft' },
+  { name: 'Game', url: '/game' },
+  { name: 'UniSwap', url: '/uniswap' },
+]
 const settings = [
-  'Token',
-  'Transaction',
-  'Transfer',
-  'Transaction Logs',
-  'Logout',
+  { name: 'Token', url: '/token' },
+  { name: 'Transfer', url: '/transfer' },
+  { name: 'Transaction Logs', url: '/transaction-logs' },
+  { name: 'Logout', url: '/' },
 ]
 
+/**
+ *
+ * @returns
+ */
 const AppBarMenu = () => {
   const [navStyle, setnavStyle] = React.useState(null)
   const [navAch, setnavAch] = React.useState(null)
   const [counter, setCounter] = React.useState(0)
   let navigate = useNavigate()
+  const dispatch = useDispatch()
+  const metaMast = useSelector((state?: any) => state.metaMask)
+  const contract = useSelector((state?: any) => state.contract)
 
   const handleOpenNavMenu = (event?: any) => {
     setnavStyle(event.currentTarget)
@@ -36,14 +65,51 @@ const AppBarMenu = () => {
     setnavAch(event.currentTarget)
   }
 
-  const handleCloseNavMenu = (page?:any) => {
+  const handleCloseNavMenu = (page?: any) => {
     setnavStyle(null)
     navigate(page.url)
   }
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (event: any, setting: any) => {
     setnavAch(null)
+    navigate(setting.url)
   }
+
+  const loadContract = async () => {
+    dispatch(contractConnect())
+    try {
+      let provider = ethers.getDefaultProvider()
+      let contractAddress = GiggleContractAddress.address
+      let contract = new ethers.Contract(
+        GiggleContractAddress.address,
+        GiggleContractABIJson.abi,
+        provider,
+      )
+      dispatch(contractSuccess({ contract, provider })) 
+    } catch (err) {
+      dispatch(contractError(err))
+    }
+  }
+
+  const connectMetamask = async () => {
+    dispatch(metaMaskConnect())
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+      // const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+      dispatch(metaMaskSuccess({ provider: new ethers.providers.Web3Provider(window.ethereum, 'any')}))
+      let pAccounts = await provider.send('eth_requestAccounts', [])
+      const signer = provider.getSigner()
+      let account = await signer.getAddress()
+      dispatch(metaMaskSuccess({account}))
+      loadContract()
+    } catch (e) {
+      dispatch(metaMaskError(e))
+    }
+  }
+
+  // redux values
+  const { isConnected, account } = metaMast
+  // const { account } = contract
 
   return (
     <Box>
@@ -73,7 +139,10 @@ const AppBarMenu = () => {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleOpenNavMenu}
+                onClick={() => {
+                  if (!account) connectMetamask()
+                  else handleOpenUserMenu()
+                }}
                 color="inherit"
               >
                 <MenuIcon />
@@ -96,7 +165,7 @@ const AppBarMenu = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page,i) => (
+                {pages.map((page, i) => (
                   <MenuItem key={i} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
@@ -122,10 +191,10 @@ const AppBarMenu = () => {
               GIGGLE TOKEN
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page,i) => (
+              {pages.map((page, i) => (
                 <Button
                   key={i}
-                  onClick={()=>handleCloseNavMenu(page)}
+                  onClick={() => handleCloseNavMenu(page)}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page.name}
@@ -135,7 +204,13 @@ const AppBarMenu = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton
+                  onClick={(e) => {
+                    if (!account) connectMetamask()
+                    else handleOpenUserMenu(e)
+                  }}
+                  sx={{ p: 0 }}
+                >
                   <Box
                     display={'flex'}
                     flexDirection="row"
@@ -143,7 +218,9 @@ const AppBarMenu = () => {
                     color={'white'}
                   >
                     <Box pr={1} fontSize={12}>
-                      0xDeCAf00000000000000000000000000000000000
+                      <Typography variant="caption" color={'secondary'}>
+                        {account || 'Guest'}
+                      </Typography>
                     </Box>
                     <AccountBalanceWalletIcon color="inherit" />
                   </Box>
@@ -163,12 +240,16 @@ const AppBarMenu = () => {
                   horizontal: 'right',
                 }}
                 open={Boolean(navAch)}
-                onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                {settings.map((setting, ind) => (
+                  <MenuItem
+                    key={ind}
+                    onClick={(e) => {
+                      handleCloseUserMenu(e, setting)
+                    }}
+                  >
                     <Box fontWeight={'bold'}>
-                      <Typography textAlign="center">{setting}</Typography>
+                      <Typography textAlign="center">{setting.name}</Typography>
                     </Box>
                   </MenuItem>
                 ))}

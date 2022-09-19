@@ -48,7 +48,6 @@ function Cards() {
   }
 
   function handleClick(id:any) {
-    debugger
     if (prev === -1) {
       items[id].stat = 'active'
       setItems([...items])

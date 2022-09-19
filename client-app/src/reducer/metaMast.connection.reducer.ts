@@ -1,21 +1,24 @@
-import { CONTRACT_STAGE } from '../actions/contract.load'
+import { META_MASK_STAGE } from '../actions/metaMask.action'
 
 let defaultState = {
+  isConnected: false,
+  error: {},
 }
 
-export default function contract(state = defaultState, action?: any) {
+export default function metaMastConnection(state = defaultState, action?: any) {
+    debugger;
   switch (action.type) {
-    case CONTRACT_STAGE.SUCCESS:
+    case META_MASK_STAGE.SUCCESS:
       return {
         ...state,
         ...action.payload,
         ...{ isConnected: true, init: false },
       }
-    case CONTRACT_STAGE.INIT:
+    case META_MASK_STAGE.CONNECTED:
       return { ...state, ...{ init: true } }
-    case CONTRACT_STAGE.ERROR:
+    case META_MASK_STAGE.ERROR:
       return { ...state, error: action.payload }
-    case CONTRACT_STAGE.RESET:
+    case META_MASK_STAGE.RESET:
       return { isConnected: false, error: {} }
     default:
       return state

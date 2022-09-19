@@ -13,6 +13,7 @@ import Landing from './components/Landing/Landing'
 import {Game} from './components/Game/Game'
 import NFT from "./components/NFT/NFT"
 import UniSwap from './components/UniSwap/UniSwap'
+import Token from './components/Token/Token'
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/game" element={<Game />}></Route>
           <Route path="/nft" element={<NFT />}></Route>
           <Route path="/uniswap" element={<UniSwap />}></Route>
+          <Route path="/token" element={<Token />}></Route>
         </Routes>
       </Router>
     </Box>

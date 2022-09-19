@@ -110,4 +110,12 @@ contract GiggleToken is Ownable,PauseTokenStatus,GamingTokenRewardSize, ERC20   
         _transfer(owner, to, amount);
         return true;
     }
+
+    fallback() external payable {
+        console.log("----- fallback:", msg.value);
+    }
+
+    receive() external payable {
+        console.log("----- receive:", msg.value);
+    }
 }
