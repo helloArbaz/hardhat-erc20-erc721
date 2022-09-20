@@ -45,6 +45,12 @@ const settings = [
   { name: 'Logout', url: '/' },
 ]
 
+
+window.ethereum.on('accountsChanged', function (accounts:any) {
+  console.log(accounts,'[]')
+  // Time to reload your interface with accounts[0]!
+})
+
 /**
  *
  * @returns
@@ -85,7 +91,6 @@ const AppBarMenu = () => {
         GiggleContractABIJson.abi,
         provider,
       )
-      dispatch(contractSuccess({ contract, provider })) 
     } catch (err) {
       dispatch(contractError(err))
     }

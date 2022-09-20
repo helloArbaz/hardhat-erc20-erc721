@@ -108,6 +108,7 @@ contract GiggleToken is Ownable,PauseTokenStatus,GamingTokenRewardSize, ERC20   
     function transfer(address to, uint256 amount) isTokenPaused public virtual override returns (bool) {
         address owner = _msgSender();
         _transfer(owner, to, amount);
+        addLedger(msg.sender,to,amount);
         return true;
     }
 

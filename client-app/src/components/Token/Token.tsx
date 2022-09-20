@@ -8,14 +8,15 @@ import { ethers } from 'ethers'
 import GiggleContractAddress from '../../contract-deployed-address/GiggleToken/GiggleToken.json'
 import GiggleContractABIJson from '../../compile-contract/contracts/GiggleToken.sol/GiggleToken.json'
 import { Typography } from '@mui/material'
+import PendingTwoToneIcon from '@mui/icons-material/PendingTwoTone'
 
 const Token = function () {
   const contract = useSelector((state?: any) => state.contract)
   const metaMask = useSelector((state?: any) => state.metaMask)
   const { contract: temp, account, provider: freeProvider } = contract
 
-  let [tokenValue, setTokenValue] = useState(null)
-  
+  let [tokenValue, setTokenValue] = useState('')
+
   // transfer code.
   //   let trx = await usdcContract.transfer("0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",10);
   //       let ttt = await trx.wait();
@@ -25,6 +26,8 @@ const Token = function () {
   //       console.log(usdcBalance2.toString(), 'usdcBalance2')
 
   async function loadTokenBalance() {
+    console.log("-----")
+    setTokenValue('')
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const signer = provider.getSigner()
@@ -42,6 +45,7 @@ const Token = function () {
   }
 
   useEffect(() => {
+    setTokenValue("")
     loadTokenBalance()
   }, [])
 
@@ -49,7 +53,7 @@ const Token = function () {
     <Box>
       <AppBarMenu />
       <Box pt={5}>
-        <Box onClick={() => loadTokenBalance()}>
+        <Box>
           <Box display={'flex'} flexDirection="column">
             <Box
               fontSize={300}
@@ -60,7 +64,9 @@ const Token = function () {
               <TokenIcon color="secondary" fontSize="inherit" />
             </Box>
             <Box textAlign={'center'}>
-              <Typography variant="h4">{tokenValue} [GGL]</Typography>
+              <Typography variant="h4">
+                {!tokenValue ? <PendingTwoToneIcon /> : `${tokenValue} [GGL]`}
+              </Typography>
               <Box fontWeight={'bold'}>
                 <Typography
                   color={'secondary'}
