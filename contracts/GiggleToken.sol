@@ -20,6 +20,7 @@ contract GiggleToken is Ownable,PauseTokenStatus,GamingTokenRewardSize, ERC20   
     event PlayerRegister(address _address, string _message);
     event playerClameReward(address _address, uint _rewardSize, string _message);
     event RewardSizeTamper(address _address, uint _rewardSize);
+    event RegisterError(address _address, string _message);
 
     address _managerAddress;
 
@@ -49,6 +50,7 @@ contract GiggleToken is Ownable,PauseTokenStatus,GamingTokenRewardSize, ERC20   
 
     function playerEnterGamingZone() public returns (bool){
         if(msg.sender == _managerAddress){
+            emit RegisterError(msg.sender,"Owner Are Not Allowed");
             revert OwnerNotAllowed(msg.sender,"Owner Are Not Allowed");
         }
         _registerPlayers[msg.sender]._numberOfTimePlayerEnterTheGame++; 

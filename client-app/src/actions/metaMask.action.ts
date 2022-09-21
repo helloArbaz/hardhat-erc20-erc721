@@ -12,7 +12,6 @@ export const metaMaskConnect = () => {
 }
 
 export const metaMaskSuccess = (payload:any) => {
-    debugger;
     return {
       type: META_MASK_STAGE.SUCCESS,
       payload

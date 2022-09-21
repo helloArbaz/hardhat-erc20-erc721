@@ -6,7 +6,6 @@ let defaultState = {
 }
 
 export default function metaMastConnection(state = defaultState, action?: any) {
-    debugger;
   switch (action.type) {
     case META_MASK_STAGE.SUCCESS:
       return {
