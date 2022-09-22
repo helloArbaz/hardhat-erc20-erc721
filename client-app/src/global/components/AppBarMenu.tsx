@@ -45,12 +45,6 @@ const settings = [
   { name: 'Logout', url: '/' },
 ]
 
-
-window && window.ethereum && window.ethereum.on('accountsChanged', function (accounts:any) {
-  console.log(accounts,'[]')
-  // Time to reload your interface with accounts[0]!
-})
-
 /**
  *
  * @returns
@@ -78,7 +72,10 @@ const AppBarMenu = () => {
 
   const handleCloseUserMenu = (event: any, setting: any) => {
     setnavAch(null)
-    navigate(setting.url)
+    if (setting.url === '/') {
+      dispatch(metaMaskSuccess({account:null}))
+      navigate(setting.url)
+    } else navigate(setting.url)
   }
 
   const loadContract = async () => {
@@ -103,13 +100,23 @@ const AppBarMenu = () => {
       let pAccounts = await provider.send('eth_requestAccounts', [])
       const signer = provider.getSigner()
       let account = await signer.getAddress()
-      dispatch(metaMaskSuccess({account}))
+      dispatch(metaMaskSuccess({ account }))
       loadContract()
     } catch (e) {
-      navigate("/install-metamask")
+      navigate('/install-metamask')
       dispatch(metaMaskError(e))
     }
   }
+  React.useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload()
+      })
+      window.ethereum.on('accountsChanged', () => {
+        window.location.reload()
+      })
+    }
+  })
 
   // redux values
   const { isConnected, account } = metaMast
@@ -244,6 +251,7 @@ const AppBarMenu = () => {
                   horizontal: 'right',
                 }}
                 open={Boolean(navAch)}
+                onClick={()=>setnavAch(null)}
               >
                 {settings.map((setting, ind) => (
                   <MenuItem
