@@ -46,7 +46,7 @@ const settings = [
 ]
 
 
-window.ethereum.on('accountsChanged', function (accounts:any) {
+window && window.ethereum && window.ethereum.on('accountsChanged', function (accounts:any) {
   console.log(accounts,'[]')
   // Time to reload your interface with accounts[0]!
 })
@@ -100,7 +100,6 @@ const AppBarMenu = () => {
     dispatch(metaMaskConnect())
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-      // const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
       dispatch(metaMaskSuccess({ provider: new ethers.providers.Web3Provider(window.ethereum, 'any')}))
       let pAccounts = await provider.send('eth_requestAccounts', [])
       const signer = provider.getSigner()
@@ -108,6 +107,7 @@ const AppBarMenu = () => {
       dispatch(metaMaskSuccess({account}))
       loadContract()
     } catch (e) {
+      navigate("/install-metamask")
       dispatch(metaMaskError(e))
     }
   }
