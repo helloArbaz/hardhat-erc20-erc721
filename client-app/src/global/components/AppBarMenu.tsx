@@ -100,7 +100,6 @@ const AppBarMenu = () => {
     dispatch(metaMaskConnect())
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-      dispatch(metaMaskSuccess({ provider: new ethers.providers.Web3Provider(window.ethereum, 'any')}))
       let pAccounts = await provider.send('eth_requestAccounts', [])
       const signer = provider.getSigner()
       let account = await signer.getAddress()

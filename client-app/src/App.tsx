@@ -18,9 +18,6 @@ import Transfer from './components/Transfer/Transfer'
 import TransactionLogs from './components/TranscationLogs/TranscationLogs'
 import InstallMetaMask from './components/InstallMetaMask/InstallMetaMask'
 
-
-
-
 function App() {
   return (
     <Box>
