@@ -3,7 +3,7 @@ import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import Card from './Card'
 import { images } from '../const'
-function Cards() {
+function Cards(props: any) {
   const [open, setOpen] = useState(true)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -26,7 +26,7 @@ function Cards() {
     p: 4,
   }
 
-  function check(current?:any) {
+  function check(current?: any) {
     if (items[current].id == items[prev].id) {
       items[current].stat = 'correct'
       items[prev].stat = 'correct'
@@ -47,8 +47,7 @@ function Cards() {
     }
   }
 
-  function handleClick(id:any) {
-    debugger
+  function handleClick(id: any) {
     if (prev === -1) {
       items[id].stat = 'active'
       setItems([...items])
@@ -58,8 +57,41 @@ function Cards() {
     }
   }
 
+  const { registerPlayer, rewardTokens,winnerModal } = props
+
+  console.log(pointer, 'pointer',winnerModal)
+
   return (
     <Box>
+      {pointer == 8 && (
+        <Modal
+          open={winnerModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+          borderRadius={2}
+            display={'flex'}
+            justifyItems="center"
+            flexDirection={'column'}
+            bgcolor={'white'}
+            sx={style}
+            textAlign="center"
+          >
+            <Typography variant='h6'>Get You Reward</Typography>
+            <Button
+
+              variant="contained"
+              color="secondary"
+              onClick={(e) => {
+                rewardTokens(pointer)
+              }}
+            >
+              Go
+            </Button>
+          </Box>
+        </Modal>
+      )}
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"
@@ -77,13 +109,20 @@ function Cards() {
               Lets Play The Game..
             </Typography>
           </Box>
-          <Button variant="outlined" color="primary" onClick={handleClose}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={(e) => {
+              handleClose()
+              registerPlayer()
+            }}
+          >
             Start
           </Button>
         </Box>
       </Modal>
 
-      <Box display={"flex"} alignItems="center" justifyContent={"center"}>
+      <Box display={'flex'} alignItems="center" justifyContent={'center'}>
         <div className="container1">
           {items.map((item, index) => (
             <Card
